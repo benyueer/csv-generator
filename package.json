@@ -1,0 +1,15 @@
+{
+  "name": "csv-generator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/benyueer/csv-generator.git",
+  "author": "benyueer <347201906@qq.com>",
+  "license": "MIT",
+  "scripts": {},
+  "dependencies": {
+    "typescript": "^4.7.4"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0"
+  }
+}
