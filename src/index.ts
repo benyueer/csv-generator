@@ -27,17 +27,19 @@ function format(date: Date, fmt: string){ //author: meizz
 }
 
 
-function generator(lines: number, columnConfigList: ColumnConfig[], delimiter: string) {
-  const res = []
+function generator(path: string, lines: number, columnConfigList: ColumnConfig[], delimiter: string = ',') {
+  console.log('开始生成。。。')
+  const writeStream = fs.createWriteStream(path)
   for (let i = 0; i < lines; i++) {
     let lineArr = []
     for (let j = 0; j < columnConfigList.length; j++) {
       lineArr[j] = genCase(columnConfigList[j])
     }
-    res.push(lineArr.join(delimiter))
+    let columnStr = lineArr.join(delimiter) + (i === lines-1 ? '' : '\n')
+    writeStream.write(columnStr)
+    // process.stdout.write(`生成第${i + 1}行`)
   }
-
-  return res.join('\n')
+  console.log(`写入成功！${path}`)
 }
 
 function genCase(config: ColumnConfig) {
@@ -79,26 +81,17 @@ function genDate() {
 }
 
 
-function writeFile(filePath: string, content: string) {
-  const writeableStream = fs.createWriteStream(filePath)
-  writeableStream.write(content)
-  writeableStream.end()
-}
+
 
 
 // const s = generator(10, [{type: 'number', len: 5}, {type: 'string', len: 10}])
 // console.log(s)
 // writeFile('hello.csv', 'qwe,qwe')
 
-function generatorCsv(path: string, lines: number, columnConfigList: ColumnConfig[], delimiter = ',') {
-  const content = generator(lines, columnConfigList, delimiter)
-  console.log('正在写入...')
-  writeFile(path, content)
-  console.log(`生成成功，请查看${path}`)
-}
 
 
-generatorCsv('hello.csv', 100, [
+
+generator('hello.csv', 1000000, [
   {
     type: 'string',
     len: 12
