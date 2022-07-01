@@ -1,5 +1,6 @@
 
 const fs = require('fs')
+const log = require('single-line-log').stdout
 
 interface ColumnConfig {
   type: string
@@ -36,10 +37,11 @@ function generator(path: string, lines: number, columnConfigList: ColumnConfig[]
       lineArr[j] = genCase(columnConfigList[j])
     }
     let columnStr = lineArr.join(delimiter) + (i === lines-1 ? '' : '\n')
-    writeStream.write(columnStr)
-    // process.stdout.write(`生成第${i + 1}行`)
+    // writeStream.write(columnStr)
+    i % 1000 === 0 && progress(i, lines)
+    // log(`生成第${i + 1}行`)
   }
-  console.log(`写入成功！${path}`)
+  console.log(`\n写入成功！${path}`)
 }
 
 function genCase(config: ColumnConfig) {
@@ -80,7 +82,13 @@ function genDate() {
   return format(new Date(), 'yyyy-MM-dd hh:mm:ss')
 }
 
-
+function progress(curIndex: number, ans: number) {
+  const p = Math.floor((curIndex / ans) * 100)
+  // console.log(curIndex, ans, p)
+  const str = new Array(p).fill('█').join('') + new Array(100 - p).fill('░').join('') + '\t' + curIndex + ' / ' + ans + '\t' + p + '%'
+  // console.log(str)
+  log(str)
+}
 
 
 
